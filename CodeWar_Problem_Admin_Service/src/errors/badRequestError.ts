@@ -2,7 +2,7 @@
 import BaseError from './baseError';
 import { StatusCodes } from 'http-status-codes';
 
-class BadRequest extends BaseError {
+class BadRequestError extends BaseError {
 	public propertyName: string;
 	public details?: unknown;
 
@@ -11,8 +11,8 @@ class BadRequest extends BaseError {
 
 		this.propertyName = propertyName;
 
-		Object.setPrototypeOf(this, BadRequest.prototype);
+		Object.setPrototypeOf(this, BadRequestError.prototype);
     }
 }
 
-export default BadRequest;
+export default BadRequestError;

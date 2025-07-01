@@ -2,7 +2,7 @@
 import BaseError  from "./baseError";
 import { StatusCodes } from "http-status-codes";
 
-class NotFound extends BaseError {
+class NotFoundError extends BaseError {
 	public resourceName: string;
 	public resourceValue: string;
 
@@ -15,8 +15,8 @@ class NotFound extends BaseError {
 		this.resourceName = resourceName;
 		this.resourceValue = resourceValue;
 
-		Object.setPrototypeOf(this, NotFound.prototype);
+		Object.setPrototypeOf(this, NotFoundError.prototype);
     }
 }
 
-export default NotFound;
+export default NotFoundError;
