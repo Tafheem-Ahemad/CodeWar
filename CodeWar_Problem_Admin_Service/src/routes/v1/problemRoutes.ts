@@ -2,7 +2,7 @@ import express from "express";
 import { validate } from "../../validators/submissionValidator";
 import { createProblemSchema } from "../../models/createProblemSchema";
 import { updateProblemSchema } from "../../models/updateProblemSchema";
-import {pingProblemController , addProblem, getProblem, updateProblem, deleteProblem} from "../../controllers/problemController";
+import {pingProblemController , addProblem, getProblem, getProblems, updateProblem, deleteProblem} from "../../controllers/problemController";
 
 export const problemRouter = express.Router();
 
@@ -10,6 +10,8 @@ export const problemRouter = express.Router();
 problemRouter.get('/ping', pingProblemController);
 
 problemRouter.post('/', validate(createProblemSchema), addProblem);
+
+problemRouter.get('/', getProblems);
 
 problemRouter.get('/:id', getProblem);
 

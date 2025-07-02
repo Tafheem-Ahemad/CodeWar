@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from "cors";
 import { PORT } from "./config/server.config";
 import {errorHandler} from "./utils/ErrorHandler";
-import { router } from "./routes/index";
+import { ApiRouter } from "./routes/index";
 
 const app=express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,7 +14,7 @@ app.use(bodyParser.text());
 app.use(cors());
 
 // Set up routes
-// app.use('/api', router);
+app.use('/api', ApiRouter);
 
 app.use(errorHandler);
 

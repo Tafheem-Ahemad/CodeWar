@@ -1,10 +1,11 @@
 import expess from "express";
+import { Request, Response } from "express";
 import { v1Router } from "./v1/index";
 
-export const router = expess.Router();
+export const ApiRouter = expess.Router();
 
-router.get('/ping', (req, res) => {
+ApiRouter.get('/ping', (req:Request , res:Response) => {
 	res.json({message: 'API is up and running'});
 });
 
-router.use('/v1', v1Router);
+ApiRouter.use('/v1', v1Router);

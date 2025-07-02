@@ -11,9 +11,7 @@ export const validate = (schema: ZodSchema<any>) => (req: Request, res: Response
 			...req.headers
 		};
 
-		if (!schema.safeParse(data).success) {
-			throw new Error('Validation failed');
-		}
+		schema.parse(data);
 
         next();
 
