@@ -1,5 +1,5 @@
 import express from "express";
-import { validate } from "../../validators/submissionValidator";
+import { validate } from "../../validators/probelemValidator";
 import { createProblemSchema } from "../../models/createProblemSchema";
 import { updateProblemSchema } from "../../models/updateProblemSchema";
 import {pingProblemController , addProblem, getProblem, getProblems, updateProblem, deleteProblem} from "../../controllers/problemController";
