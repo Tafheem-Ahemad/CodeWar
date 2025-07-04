@@ -5,7 +5,7 @@ import { fetchDecodedStream } from './dockerOutputFetcher';
 import pullImage from './pullImage';
 
 class JavaExecutor implements CodeExecutorStrategy {
-    async execute(code: string, inputTestCase: string,): Promise<ExecutionResponse> {
+    async execute(code: string, inputTestCase: string): Promise<ExecutionResponse> {
         console.log("Java executor called");
         console.log(code, inputTestCase);
 
@@ -46,13 +46,11 @@ class JavaExecutor implements CodeExecutorStrategy {
 
             return {
 				output: codeResponse,
-				status: "SUCCESS"
+				status: "COMPLETED"
 			};
 
         } catch (error : any) {
-            console.log("Error occurred", error);
-
-			if ((error as any).statusCode === 137) {
+            if(error === "MLE") {
                 return { output: "Memory Limit Exceeded", status: "MLE" };
             }
 
@@ -64,7 +62,6 @@ class JavaExecutor implements CodeExecutorStrategy {
         } finally {
 
             await javaDockerContainer.remove();
-
         }
     }
         

@@ -10,7 +10,6 @@ export const fetchTestCases = async (problemId: string): Promise<TestCases> => {
 			select: {
 				input: true,
 				output: true,
-				isHidden: true,
 			},
 		});
 

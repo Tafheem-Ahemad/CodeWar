@@ -1,34 +1,34 @@
 import CodeExecutorStrategy, { ExecutionResponse } from '../types/CodeExecutorStrategy';
-import { PYTHON_IMAGE } from '../utils/constants';
+import { CPP_IMAGE } from '../utils/constants';
 import createContainer from './containerFactory';
 import { fetchDecodedStream } from './dockerOutputFetcher';
 import pullImage from './pullImage';
 
 
-class PythonExecutor implements CodeExecutorStrategy {
+class CppExecutor implements CodeExecutorStrategy {
 
     async execute(code: string, inputTestCase: string): Promise<ExecutionResponse> {
         console.log(code, inputTestCase);
         const rawLogBuffer: Buffer[] = [];
 
-        await pullImage(PYTHON_IMAGE);
+        await pullImage(CPP_IMAGE);
 
-        console.log("Initialising a new python docker container");
-        const runCommand = `echo '${code.replace(/'/g, `'\\"`)}' > test.py && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | python3 test.py`;
+        console.log("Initialising a new C++ docker container");
+        const runCommand = `echo '${code.replace(/'/g, `'\\"`)}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | ./main`;
+
         console.log(runCommand);
-        // const pythonDockerContainer = await createContainer(PYTHON_IMAGE, ['python3', '-c', code, 'stty -echo']); 
-        const pythonDockerContainer = await createContainer(PYTHON_IMAGE, [
+        const cppDockerContainer = await createContainer(CPP_IMAGE, [
             '/bin/sh', 
             '-c',
             runCommand
         ]); 
 
         // starting / booting the corresponding docker container
-        await pythonDockerContainer.start();
+        await cppDockerContainer.start();
 
         console.log("Started the docker container");
 
-        const loggerStream = await pythonDockerContainer.logs({
+        const loggerStream = await cppDockerContainer.logs({
             stdout: true,
             stderr: true,
             timestamps: false,
@@ -41,7 +41,7 @@ class PythonExecutor implements CodeExecutorStrategy {
         });
 
         try {
-            const codeResponse : string = await fetchDecodedStream(pythonDockerContainer, loggerStream, rawLogBuffer, 5000);
+            const codeResponse : string = await fetchDecodedStream(cppDockerContainer, loggerStream, rawLogBuffer, 1000);
 
             return {output: codeResponse, 
                 status: "COMPLETED"
@@ -58,12 +58,11 @@ class PythonExecutor implements CodeExecutorStrategy {
 
             return { output: error?.toString() || "Unknown Error", status: "ERROR" };
         } finally {
-            await pythonDockerContainer.remove();
-
+            await cppDockerContainer.remove();
         }
     }
 
         
 }
 
-export default PythonExecutor;
+export default CppExecutor;

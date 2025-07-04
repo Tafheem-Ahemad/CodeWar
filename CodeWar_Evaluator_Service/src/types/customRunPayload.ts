@@ -1,7 +1,8 @@
-export type SubmissionPayload = {
+export type CustomRunPayload = {
     code: string,
     language: string,
+	inputCase: string,
     userId: string,
-    problemId: string,
+	problemId: string,
     submissionId: string
-}
+};

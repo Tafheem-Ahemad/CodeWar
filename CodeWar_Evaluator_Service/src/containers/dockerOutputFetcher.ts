@@ -37,24 +37,46 @@ function decodeDockerStream(buffer: Buffer) : DockerStreamOutput{
 
 export async function fetchDecodedStream(dockerContainer :Docker.Container , loggerStream: NodeJS.ReadableStream, rawLogBuffer: Buffer[], timeNeed:number ) : Promise<string>{
     
-	return new Promise((res, rej) => {
+	return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
             console.log("Timeout called");
 			dockerContainer.kill();
-            rej("TLE");
+            reject("TLE");
         }, timeNeed);
         loggerStream.on('end', () => {
+            loggerStream.on("end", async () => {
             clearTimeout(timeout);
-            console.log(rawLogBuffer);
-            const completeBuffer = Buffer.concat(rawLogBuffer);
-            const decodedStream = decodeDockerStream(completeBuffer);
-            // console.log(decodedStream);
-            // console.log(decodedStream.stdout);
-            if(decodedStream.stderr) {
-                rej(decodedStream.stderr);
-            } else {
-                res(decodedStream.stdout);
+
+            try {
+                // Check container exit code
+                const inspectData = await dockerContainer.inspect();
+                const exitCode = inspectData?.State?.ExitCode;
+
+                if (exitCode === 137) {
+                    console.log("Memory Limit Exceeded detected");
+                    reject("MLE");
+                    return;
+                }
+
+                const completeBuffer = Buffer.concat(rawLogBuffer);
+                const decodedStream = decodeDockerStream(completeBuffer);
+
+                if (decodedStream.stderr) {
+                    reject(decodedStream.stderr);
+                } else {
+                    resolve(decodedStream.stdout);
+                }
+            } catch (err) {
+                console.error("Error inspecting container:", err);
+                reject("ERROR");
             }
+        });
+
+            loggerStream.on("error", (err) => {
+                clearTimeout(timeout);
+                console.error("Logger stream error:", err);
+                reject("ERROR");
+            });
         });
     })
 }
