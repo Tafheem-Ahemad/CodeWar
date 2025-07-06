@@ -3,7 +3,7 @@ import { problemSolution } from "../types/problemSolution";
 
 export const fetchSolution = async (problemId: string): Promise<problemSolution> => {
 	try {
-		const solution = await prisma.testcase.findFirst({
+		const solution = await prisma.solution.findFirst({
 			where: {
 				problemId: problemId,
 			},

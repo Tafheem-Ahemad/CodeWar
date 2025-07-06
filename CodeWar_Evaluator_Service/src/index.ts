@@ -3,6 +3,7 @@ import express, { Express ,Request , Response } from "express";
 import cors from "cors";
 import serverConfig from "./config/service.config";
 import bullBoardAdapter from "./config/bullBoard.config";
+import { workerLoop } from "./workers/controlLoop";
 
 const app: Express = express();
 
@@ -17,9 +18,15 @@ app.get('/', (req:Request, res:Response) => {
 });
 
 app.use('/ui', bullBoardAdapter.getRouter());
-// app.use('/api', apiRouter);
 
 app.listen(serverConfig.PORT, () => {
   console.log(`Server is running at http://localhost:${serverConfig.PORT}`);
-  
+  console.log(`Bull Board is running at http://localhost:${serverConfig.PORT}/ui`);
+
+//   createCustomRunBeforeEvaluationWorker("customRunBeforeEvaluationQueue");
+//   SubmissionBeforeEvaluationWorker("submissionBeforeEvaluationQueue");
+  workerLoop().catch((error) => {
+	console.error("Error in worker loop:", error);
+  });
+
 });

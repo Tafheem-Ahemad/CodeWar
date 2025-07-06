@@ -5,8 +5,8 @@ import { IJob } from "../types/bullMqJobDefinition";
 import { ExecutionResponse } from "../types/CodeExecutorStrategy";
 import { CustomRunPayload } from "../types/customRunPayload";
 import createExecutor from "../utils/ExecutorFactory";
-import {fetchSolution} from "../fetchData/fetchSolution";
-import {problemSolution} from "../types/problemSolution";
+import { fetchSolution } from "../fetchData/fetchSolution";
+import { problemSolution } from "../types/problemSolution";
 
 export default class CustomRunJob implements IJob {
 	name: string;
@@ -29,7 +29,7 @@ export default class CustomRunJob implements IJob {
 			console.log(strategy);
 			if(strategy != null) {
 
-				let result = "SUCCESS";
+				let result = "AC";
 
 				const response: ExecutionResponse = await strategy.execute(code, inputCase);
 				if(response.status === "COMPLETED") {
@@ -46,7 +46,7 @@ export default class CustomRunJob implements IJob {
 					customRunAfterEvaluationProducer({result, userId: this.payload[key].userId, submissionId: this.payload[key].submissionId});
 				}
 
-				if(result === "SUCCESS"){
+				if(result === "AC"){
 					console.log("Code executed successfully");
 					console.log(result);
 				}else{

@@ -5,8 +5,8 @@ import { IJob } from "../types/bullMqJobDefinition";
 import { ExecutionResponse } from "../types/CodeExecutorStrategy";
 import { SubmissionPayload } from "../types/submissionPayload";
 import createExecutor from "../utils/ExecutorFactory";
-import {fetchTestCases} from "../fetchData/fetchTestcases";
-import {TestCases} from "../types/testCases";
+import { fetchTestCases } from "../fetchData/fetchTestcases";
+import { TestCases } from "../types/testCases";
 
 export default class SubmissionJob implements IJob {
     name: string;
@@ -30,8 +30,8 @@ export default class SubmissionJob implements IJob {
 
 				const testcases : TestCases = await fetchTestCases(problemId);
 
-				let result = "SUCCESS";
-				for (const testcase of testcases) {
+				let result = "AC";
+				for (const testcase of testcases){
 					const response : ExecutionResponse = await strategy.execute(code, testcase.input);
 					
 					if(response.status === "COMPLETED") {
@@ -39,7 +39,7 @@ export default class SubmissionJob implements IJob {
 							result = "WA";
 							break;
 						}
-					} else {
+					}else{
 						result  = response.status || "Unknown Error";
 						break;
 					}
@@ -47,10 +47,10 @@ export default class SubmissionJob implements IJob {
 
 
                 submissionAfterEvaluationProducer({result, userId: this.payload[key].userId, submissionId: this.payload[key].submissionId});
-                if(result === "SUCCESS"){
+                if(result === "AC"){
                     console.log("Code executed successfully");
                     console.log(result);
-                } else {
+                }else{
                     console.log("Something went wrong with code execution");
                     console.log(result);
                 }
