@@ -5,7 +5,9 @@ dotenv.config();
 const serverConfig = {
 	PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : 3002,
 	REDIS_PORT: process.env.REDIS_PORT,
-	REDIS_HOST: process.env.REDIS_HOST
+	REDIS_HOST: process.env.REDIS_HOST,
+	PROBLEM_SERVICE_DB_URL: process.env.PROBLEM_SERVICE_DB_URL,
+	SUBMISSION_SERVICE_DB_URL: process.env.SUBMISSION_SERVICE_DB_URL,
 }
 
 export default serverConfig;

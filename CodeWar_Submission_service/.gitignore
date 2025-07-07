@@ -1,6 +1,42 @@
 node_modules
+
 # Keep environment variables out of version control
 .env
 /dist
 
 /generated/prisma
+/generated/problemService
+/generated/submissionService
+/generated
+
+# Ignore Prisma migrations
+prisma/problem_service_db/migrations
+prisma/submission_service_db/migrations
+
+# Ignore IDE specific files
+.vscode
+.idea
+*.sublime-workspace
+*.sublime-project
+# Ignore logs
+
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore coverage reports
+coverage
+*.lcov
+
+# Ignore build artifacts
+dist
+build
+# Ignore temporary files
+tmp
+temp
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db

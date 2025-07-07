@@ -1,23 +1,22 @@
-import fastify,{FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
+import fastify from 'fastify';
 import serverConfig from "./config/serverConfig";
+import errorHandler from './utils/errorhandlers';
 
 
-const app : FastifyInstance = fastify({
-    logger: true,
-    trustProxy: true
+const Fastify = fastify({
+    logger: true
 });
 
-
-// in fastify, you don't need to explicitly menstion the type of the request and reply objects
-// as it infers the types automatically, but you can still do it for clarity
-app.get('/', async (req: FastifyRequest, res: FastifyReply) => {
+Fastify.get('/', async () => {
     return { message: 'Welcome to CodeWar Submission Service!' };
 });
 
-app.listen({ port: serverConfig.PORT }, (err, address) => {
+Fastify.setErrorHandler(errorHandler)
+
+Fastify.listen({ port: serverConfig.PORT }, (err, address) => {
     if (err) {
-        app.log.error(err);
+        Fastify.log.error(err);
         process.exit(1);
     }
-    app.log.info(`Server listening at ${address}`);
+    Fastify.log.info(`Server listening at ${address}`);
 });
