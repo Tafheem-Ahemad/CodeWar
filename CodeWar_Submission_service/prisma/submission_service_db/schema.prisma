@@ -10,21 +10,24 @@ datasource db {
 
 model User {
   id            String   @id
-  username      String   @unique
+  username      String   
   email         String   @unique
-  password      String
   problemSolved Int      @default(0) 
+  bio           String   @default("")
+  profilePicture String   @default("")
+  createdAt     DateTime @default(now())
   submissions   Submission[]
 }
 
 model Submission {
-  id          String   @id
+  id          String   @id @default(cuid())
   userId      String
   problemId   String
   language    String
   code        String
   status      String   @default("PENDING")
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
   User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId, code])
 }
