@@ -1,11 +1,11 @@
 import submissionServiceDB from './../config/submissionServiceDBConnection';
 import { NotFoundError } from '../errors/notFoundError';
-import { SubmissionRepositoryInterface } from '../models/submissionReposatoryInterface';
+import { SubmissionRepositoryInterface } from '../types/submissionReposatoryInterface';
 import { ProblemSubmission } from '../models/problemSubmissionSchema';
-import { Submission } from '../models/submissionSchema';
-import { ProblemStatus } from '../models/problemStatus';
-import { User } from '../models/userSchema';
-import { createSubmissionResponse } from '../models/createSubmissionResponse';
+import { Submission } from '../types/submissionSchema';
+import { ProblemStatus } from '../types/problemStatus';
+import { User } from '../types/userSchema';
+import { createSubmissionResponse } from '../types/createSubmissionResponse';
 
 export class SubmissionRepository implements SubmissionRepositoryInterface {
 	dbConnection: typeof submissionServiceDB;

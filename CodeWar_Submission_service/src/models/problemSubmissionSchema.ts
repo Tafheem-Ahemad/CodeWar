@@ -1,6 +1,6 @@
 import {z} from 'zod';
 
-const problemSubmissionSchema = z.object({
+export const problemSubmissionSchema = z.object({
   	problemId: z.string(),
   	userId: z.string(),
   	code: z.string(),

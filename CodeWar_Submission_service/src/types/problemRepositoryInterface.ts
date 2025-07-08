@@ -1,5 +1,5 @@
 
-import { Problem } from '../models/problemSchema';
+import { Problem } from './problemSchema';
 
 export interface ProblemRepositoryInterface {
 	getProblemById(id: string): Promise<Problem>;

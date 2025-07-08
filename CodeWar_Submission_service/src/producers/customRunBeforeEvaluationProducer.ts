@@ -1,7 +1,7 @@
 import customRunBeforeEvaluationQueue from "../queues/customRunBeforeEvaluationQueue";
-import { CustomRunPayload } from "../models/customRunPayload";
+import { CustomRun } from "../models/customRunSchema";
 
-export default async function customRunBeforeEvaluationProducer(payload : CustomRunPayload){
+export default async function customRunBeforeEvaluationProducer(payload : CustomRun){
 	try {
 		await customRunBeforeEvaluationQueue.add("customRunBeforeEvaluationJob",payload);
 		console.log("Payload added to customRunBeforeEvaluationQueue successfully.");

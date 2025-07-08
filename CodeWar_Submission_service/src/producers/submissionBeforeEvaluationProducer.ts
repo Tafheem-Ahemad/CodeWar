@@ -1,5 +1,5 @@
 import submissionBeforeEvaluationQueue from "../queues/submissionBeforeEvaluationQueue";
-import { SubmissionPayload } from "../models/submissionPayload";
+import { SubmissionPayload } from "../types/submissionPayload";
 
 export default async function submissionBeforeEvaluationProducer(payload: SubmissionPayload) {
 	try {

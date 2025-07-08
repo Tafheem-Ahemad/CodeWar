@@ -1,5 +1,5 @@
 import { FastifyInstance} from "fastify";
-import fp from "fastify-plugin";
+import fastifyPlugin from "fastify-plugin";
 import { SubmissionRepository } from "./submissionRepository";
 import { ProblemRepository } from "./problemRepository";
 
@@ -10,4 +10,6 @@ const repositoryPlugin = async (fastify: FastifyInstance) => {
 	fastify.decorate("problemRepository", new ProblemRepository());
 };
 
-export default fp(repositoryPlugin);
+export default fastifyPlugin(repositoryPlugin,{
+	name: "repositoryPlugin",
+});

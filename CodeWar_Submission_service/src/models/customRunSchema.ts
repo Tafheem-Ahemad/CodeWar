@@ -1,6 +1,6 @@
 import {z} from 'zod';
 
-const customRunSchema = z.object({
+export const customRunSchema = z.object({
 	problemId: z.string(),
 	userId: z.string(),
 	code: z.string(),

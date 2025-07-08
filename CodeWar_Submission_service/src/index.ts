@@ -1,17 +1,16 @@
 import fastify from 'fastify';
 import serverConfig from "./config/serverConfig";
 import errorHandler from './utils/errorhandlers';
+import app from './app';
 
 
 const Fastify = fastify({
     logger: true
 });
 
-Fastify.get('/', async () => {
-    return { message: 'Welcome to CodeWar Submission Service!' };
-});
 
-Fastify.setErrorHandler(errorHandler)
+Fastify.register(app);
+Fastify.setErrorHandler(errorHandler);
 
 Fastify.listen({ port: serverConfig.PORT }, (err, address) => {
     if (err) {
