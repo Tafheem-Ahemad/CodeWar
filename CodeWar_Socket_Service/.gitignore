@@ -1,0 +1,18 @@
+# Keep environment variables out of version control
+.env
+/dist
+
+# Ignore node_modules and build artifacts
+node_modules
+*.log
+*.tsbuildinfo
+*.js
+
+
+
+# Optional npm cache directory
+.npm
+# Optional eslint cache
+.eslintcache
+# Optional REPL history
+.repl_history
