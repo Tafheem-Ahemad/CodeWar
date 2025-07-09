@@ -9,22 +9,21 @@ import { fetchTestCases } from "../fetchData/fetchTestcases";
 import { TestCases } from "../types/testCases";
 
 export default class SubmissionJob implements IJob {
-    name: string;
-    payload: Record<string, SubmissionPayload>;
-    constructor(payload: Record<string, SubmissionPayload>) {
+    payload: SubmissionPayload
+    constructor(payload: SubmissionPayload ) {
         this.payload = payload;
-        this.name = this.constructor.name;
     }
 
     handle = async (job?: Job) => {
         console.log("Handler of the job called");
         console.log(this.payload);
         if(job) {
-            const key = Object.keys(this.payload)[0];
-            const codeLanguage = this.payload[key].language;
-            const code = this.payload[key].code;
-			const problemId = this.payload[key].problemId;
+            const problemId = this.payload.problemId;
+            const codeLanguage = this.payload.language;
+            const code = this.payload.code;
+
             const strategy = createExecutor(codeLanguage);
+
             console.log(strategy);
             if(strategy != null) {
 
@@ -40,13 +39,18 @@ export default class SubmissionJob implements IJob {
 							break;
 						}
 					}else{
-						result  = response.status || "Unknown Error";
+						result  = response.status || "Error";
 						break;
 					}
 				}
 
+                const payload = {
+                    ...this.payload,
+                    result: result,
+                }
 
-                submissionAfterEvaluationProducer({result, userId: this.payload[key].userId, submissionId: this.payload[key].submissionId});
+                await submissionAfterEvaluationProducer(payload);
+                
                 if(result === "AC"){
                     console.log("Code executed successfully");
                     console.log(result);

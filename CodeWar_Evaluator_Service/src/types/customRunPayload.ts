@@ -4,5 +4,4 @@ export type CustomRunPayload = {
 	inputCase: string,
     userId: string,
 	problemId: string,
-    submissionId: string
 };

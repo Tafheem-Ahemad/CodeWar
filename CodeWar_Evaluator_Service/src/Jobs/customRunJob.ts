@@ -9,23 +9,21 @@ import { fetchSolution } from "../fetchData/fetchSolution";
 import { problemSolution } from "../types/problemSolution";
 
 export default class CustomRunJob implements IJob {
-	name: string;
-	payload: Record<string, CustomRunPayload>;
-	constructor(payload: Record<string, CustomRunPayload>) {
+	payload: CustomRunPayload
+	constructor(payload: CustomRunPayload) {
 		this.payload = payload;
-		this.name = this.constructor.name;
 	}
 
 	handle = async (job?: Job) => {
 		console.log("Handler of the job called");
 		console.log(this.payload);
 		if(job){
-			const key = Object.keys(this.payload)[0];
-			const codeLanguage = this.payload[key].language;
-			const code = this.payload[key].code;
-			const problemId = this.payload[key].problemId;
+			const problemId = this.payload.problemId;
+			const codeLanguage = this.payload.language;
+			const code = this.payload.code;
+			const inputCase = this.payload.inputCase;
+
 			const strategy = createExecutor(codeLanguage);
-			const inputCase = this.payload[key].inputCase;
 			console.log(strategy);
 			if(strategy != null) {
 
@@ -43,8 +41,15 @@ export default class CustomRunJob implements IJob {
 					}
 				}else{
 					result = response.status;
-					customRunAfterEvaluationProducer({result, userId: this.payload[key].userId, submissionId: this.payload[key].submissionId});
 				}
+
+				console.log("Result of code execution: ", result);
+				const payload = {
+					...this.payload,
+					result: result,
+				}
+
+				await customRunAfterEvaluationProducer(payload);
 
 				if(result === "AC"){
 					console.log("Code executed successfully");
